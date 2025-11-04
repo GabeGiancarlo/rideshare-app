@@ -3,8 +3,9 @@
 CPSC 408 Assignment 05 - Rideshare Web Application
 Flask web application for the rideshare management system.
 
-Author: [Your Name]
-Date: [Current Date]
+Authors:
+- Gabe Giancarlo (2405449) - giancarlo@chapman.edu
+- Gustavo de Moraes (002427902) - demoraes@chapman.edu
 """
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify

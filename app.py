@@ -3,8 +3,9 @@
 CPSC 408 Assignment 05 - Rideshare Application
 Main application file for the rideshare management system.
 
-Author: [Your Name]
-Date: [Current Date]
+Authors:
+- Gabe Giancarlo (2405449) - giancarlo@chapman.edu
+- Gustavo de Moraes (002427902) - demoraes@chapman.edu
 """
 
 import sys

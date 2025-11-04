@@ -1,7 +1,16 @@
 # CPSC 408 Assignment 05 - Rideshare Application
 
-## Author
-[Your Name]
+## Authors
+
+**Gabe Giancarlo**
+- Student ID: 2405449
+- Email: giancarlo@chapman.edu
+- GitHub: [GabeGiancarlo](https://github.com/GabeGiancarlo)
+
+**Gustavo de Moraes**
+- Student ID: 002427902
+- Email: demoraes@chapman.edu
+- GitHub: [GuMoraes11](https://github.com/GuMoraes11)
 
 ## Description
 A comprehensive rideshare management system built with Python and MySQL that allows users to manage driver and rider accounts, create rides, and rate experiences. The application implements a complete database schema with proper normalization and referential integrity.
@@ -107,7 +116,7 @@ assignment5/
 ├── README.md              # This file
 ├── requirements.md        # Assignment requirements document
 ├── DATABASE_SETUP.md      # Database setup instructions
-└── plan.txt               # Database design plan and relationships
+└── plan.txt               # Database design plan and relationships (design documentation)
 ```
 
 ## Installation and Setup

@@ -3,8 +3,9 @@
 CPSC 408 Assignment 05 - Helper Functions
 Helper functions module for the rideshare application.
 
-Author: [Your Name]
-Date: [Current Date]
+Authors:
+- Gabe Giancarlo (2405449) - giancarlo@chapman.edu
+- Gustavo de Moraes (002427902) - demoraes@chapman.edu
 """
 
 from typing import List, Dict, Optional

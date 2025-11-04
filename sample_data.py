@@ -3,8 +3,9 @@
 CPSC 408 Assignment 05 - Sample Data
 Script to populate the rideshare database with sample data for testing.
 
-Author: [Your Name]
-Date: [Current Date]
+Authors:
+- Gabe Giancarlo (2405449) - giancarlo@chapman.edu
+- Gustavo de Moraes (002427902) - demoraes@chapman.edu
 """
 
 import mysql.connector
