@@ -91,17 +91,23 @@ assignment5/
 ├── helper.py              # Helper functions module
 ├── schema.sql             # MySQL database schema
 ├── sample_data.py         # Sample data insertion script
-├── templates/            # HTML templates for web app
-│   ├── base.html         # Base template
-│   ├── index.html        # Home page
-│   ├── register*.html    # Registration pages
-│   ├── *login.html       # Login pages
-│   └── *.html            # Other pages
+├── requirements.txt        # Python dependencies
+├── start_app.sh           # Application startup script
+├── ER Diagram/            # ER Diagram folder (project requirement)
+│   ├── IMG_6914.HEIC      # ER diagram image 1
+│   └── IMG_6915.HEIC      # ER diagram image 2
+├── templates/             # HTML templates for web app
+│   ├── base.html          # Base template
+│   ├── index.html         # Home page
+│   ├── register*.html     # Registration pages
+│   ├── *login.html        # Login pages
+│   └── *.html             # Other pages
+├── media/                 # Screenshots and media files
+│   └── Screenshot*.png    # Application screenshots
 ├── README.md              # This file
-├── requirements.md        # Assignment requirements
-├── plan.txt               # ER diagram and design plan
-├── IMG_6914.HEIC          # ER diagram image 1
-└── IMG_6915.HEIC          # ER diagram image 2
+├── requirements.md        # Assignment requirements document
+├── DATABASE_SETUP.md      # Database setup instructions
+└── plan.txt               # Database design plan and relationships
 ```
 
 ## Installation and Setup
@@ -142,24 +148,30 @@ assignment5/
 
 #### Web Application (Browser)
 
-1. Install Flask (if not already installed):
+1. Navigate to the assignment5 directory
+
+2. Activate virtual environment and install dependencies (if not done):
    ```bash
-   pip install Flask
+   source venv/bin/activate  # or: python -m venv venv && source venv/bin/activate
+   pip install -r requirements.txt
    ```
 
-2. Navigate to the assignment5 directory
-
-3. Run the web application:
+3. Run the web application using the startup script:
    ```bash
+   ./start_app.sh
+   ```
+   
+   Or manually:
+   ```bash
+   source venv/bin/activate
+   export MYSQL_PASSWORD=""  # Set if MySQL has no password
    python web_app.py
    ```
 
 4. Open your web browser and navigate to:
    ```
-   http://localhost:5000
+   http://localhost:8080
    ```
-
-5. Enter MySQL password when prompted (if using default settings)
 
 The web application provides a modern, clean interface accessible through your browser with all the same functionality as the CLI version.
 
@@ -400,15 +412,23 @@ self.db_ops = DatabaseOperations(
 
 ## Assignment Completion Summary
 
-- [x] ER Diagram created (see IMG_6914.HEIC and IMG_6915.HEIC)
+- [x] ER Diagram created (located in `ER Diagram/` folder - see IMG_6914.HEIC and IMG_6915.HEIC)
 - [x] Database schema designed and implemented
 - [x] MySQL database created locally
 - [x] Sample data populated for testing
-- [x] Interactive Python program with all required features
+- [x] Interactive Python program with all required features (CLI and Web interfaces)
 - [x] All relationships properly implemented
 - [x] Database normalized to 3NF
 - [x] Referential integrity maintained
 - [x] Clean, professional user interface
 - [x] Comprehensive error handling
 - [x] Complete documentation
+
+## Project Structure Notes
+
+- **ER Diagram**: Located in `ER Diagram/` folder as per project requirements
+- **Application Files**: Core application logic in root directory
+- **Templates**: All HTML templates organized in `templates/` folder
+- **Media**: Screenshots and images stored in `media/` folder
+- **Documentation**: Assignment requirements, database setup, and design plans included
 
