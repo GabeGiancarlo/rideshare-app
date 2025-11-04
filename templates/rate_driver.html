@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Rate My Driver - Rideshare Application{% endblock %}
+
+{% block content %}
+<h2 style="color: #667eea; margin-bottom: 30px;">Rate My Driver</h2>
+
+{% if most_recent_ride %}
+<div class="card" style="margin-bottom: 30px;">
+    <h3>Most Recent Ride</h3>
+    <p><strong>Ride ID:</strong> {{ most_recent_ride.ride_id }}</p>
+    <p><strong>Pickup:</strong> {{ most_recent_ride.pickup_location }}</p>
+    <p><strong>Dropoff:</strong> {{ most_recent_ride.dropoff_location }}</p>
+    <p><strong>Driver:</strong> {{ most_recent_ride.driver_name or 'N/A' }}</p>
+    {% if most_recent_ride.rating %}
+    <p><strong>Current Rating:</strong> {{ most_recent_ride.rating }}/5</p>
+    {% endif %}
+</div>
+{% endif %}
+
+<form method="POST" action="{{ url_for('rider_rate') }}">
+    {% if all_rides %}
+    <div class="form-group">
+        <label>Select Ride <span class="required">*</span></label>
+        <select name="ride_id" required>
+            <option value="">Select a ride to rate</option>
+            {% for ride in all_rides %}
+            <option value="{{ ride.ride_id }}" {% if most_recent_ride and ride.ride_id == most_recent_ride.ride_id %}selected{% endif %}>
+                Ride #{{ ride.ride_id }} - {{ ride.pickup_location }} to {{ ride.dropoff_location }}
+                {% if ride.rating %}(Already rated: {{ ride.rating }}/5){% endif %}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    {% else %}
+    <input type="hidden" name="ride_id" value="{{ most_recent_ride.ride_id if most_recent_ride else '' }}">
+    <p>No rides available to rate.</p>
+    {% endif %}
+    
+    <div class="form-group">
+        <label>Rating <span class="required">*</span></label>
+        <select name="rating" required>
+            <option value="">Select rating</option>
+            <option value="1">1 - Poor</option>
+            <option value="2">2 - Fair</option>
+            <option value="3">3 - Good</option>
+            <option value="4">4 - Very Good</option>
+            <option value="5">5 - Excellent</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>Rating Comment</label>
+        <textarea name="rating_comment" rows="4" placeholder="Optional comment about your experience"></textarea>
+    </div>
+    
+    {% if all_rides %}
+    <button type="submit" class="btn" style="width: 100%;">Submit Rating</button>
+    {% endif %}
+</form>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{{ url_for('rider_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}
+

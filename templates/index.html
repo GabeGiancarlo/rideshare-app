@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Rideshare Application{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 60px 20px;">
+    <h2 style="color: #667eea; margin-bottom: 30px; font-size: 2em;">Welcome to Rideshare</h2>
+    <p style="font-size: 1.2em; color: #6c757d; margin-bottom: 40px;">Connect drivers and riders seamlessly</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 800px; margin: 0 auto;">
+        <div class="dashboard-card">
+            <h3>New Account</h3>
+            <p style="margin: 15px 0;">Create a new rider or driver account</p>
+            <a href="{{ url_for('register') }}" class="btn">Create Account</a>
+        </div>
+        
+        <div class="dashboard-card">
+            <h3>Rider Login</h3>
+            <p style="margin: 15px 0;">Login as an existing rider</p>
+            <a href="{{ url_for('rider_login') }}" class="btn">Login as Rider</a>
+        </div>
+        
+        <div class="dashboard-card">
+            <h3>Driver Login</h3>
+            <p style="margin: 15px 0;">Login as an existing driver</p>
+            <a href="{{ url_for('driver_login') }}" class="btn">Login as Driver</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

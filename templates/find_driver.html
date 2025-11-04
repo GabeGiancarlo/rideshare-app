@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Find a Driver - Rideshare Application{% endblock %}
+
+{% block content %}
+<h2 style="color: #667eea; margin-bottom: 30px;">Find a Driver</h2>
+
+<form method="POST" action="{{ url_for('rider_find_driver') }}">
+    <div class="form-group">
+        <label>Pickup Location <span class="required">*</span></label>
+        <input type="text" name="pickup_location" required placeholder="Enter pickup location">
+    </div>
+    
+    <div class="form-group">
+        <label>Pickup Address</label>
+        <input type="text" name="pickup_address" placeholder="Enter full pickup address (optional)">
+    </div>
+    
+    <div class="form-group">
+        <label>Dropoff Location <span class="required">*</span></label>
+        <input type="text" name="dropoff_location" required placeholder="Enter dropoff location">
+    </div>
+    
+    <div class="form-group">
+        <label>Dropoff Address</label>
+        <input type="text" name="dropoff_address" placeholder="Enter full dropoff address (optional)">
+    </div>
+    
+    <div class="form-group">
+        <label>Fare Amount</label>
+        <input type="number" name="fare_amount" step="0.01" min="0" placeholder="Enter fare amount (optional)">
+    </div>
+    
+    <button type="submit" class="btn" style="width: 100%;">Request Ride</button>
+</form>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{{ url_for('rider_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}
+

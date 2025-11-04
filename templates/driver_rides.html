@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}My Rides - Rideshare Application{% endblock %}
+
+{% block content %}
+<h2 style="color: #667eea; margin-bottom: 30px;">My Rides</h2>
+
+{% if rides %}
+<p style="margin-bottom: 20px; color: #6c757d;">Total rides: {{ rides|length }}</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ride ID</th>
+            <th>Status</th>
+            <th>Pickup Location</th>
+            <th>Dropoff Location</th>
+            <th>Fare</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ride in rides %}
+        <tr>
+            <td>{{ ride.ride_id }}</td>
+            <td>
+                <span class="status-badge status-{{ ride.ride_status }}">{{ ride.ride_status.upper() }}</span>
+            </td>
+            <td>{{ ride.pickup_location }}</td>
+            <td>{{ ride.dropoff_location }}</td>
+            <td>{% if ride.fare_amount %}${{"%.2f"|format(ride.fare_amount)}}{% else %}N/A{% endif %}</td>
+            <td>{% if ride.rating %}{{ ride.rating }}/5{% else %}N/A{% endif %}</td>
+            <td><a href="{{ url_for('driver_ride_detail', ride_id=ride.ride_id) }}" class="btn" style="padding: 6px 12px; font-size: 14px;">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <p>You haven't completed any rides yet.</p>
+</div>
+{% endif %}
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{{ url_for('driver_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}
+

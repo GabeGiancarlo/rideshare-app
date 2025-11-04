@@ -1,0 +1,180 @@
+RELATIONSHIP 1: USER → DRIVER (1:1)
+-----------------------------------
+Cardinality: One-to-One (1:1)
+Type: Optional (a user may or may not be a driver)
+Relationship Name: "has" or "is"
+Description: 
+  - One user can have exactly one driver profile (if they choose to be a driver)
+  - If a user is not a driver, they will have no DRIVER record
+  - Each driver profile belongs to exactly one user
+Implementation: DRIVER.user_id → USER.user_id
+Business Logic: 
+  - Supports requirement: "If the user is new, let them create either a rider or 
+    driver account"
+  - User authentication happens via USER entity, then they access DRIVER or RIDER
+
+RELATIONSHIP 2: USER → RIDER (1:1)
+-----------------------------------
+Cardinality: One-to-One (1:1)
+Type: Optional (a user may or may not be a rider)
+Relationship Name: "has" or "is"
+Description:
+  - One user can have exactly one rider profile (if they choose to be a rider)
+  - If a user is not a rider, they will have no RIDER record
+  - Each rider profile belongs to exactly one user
+Implementation: RIDER.user_id → USER.user_id
+Business Logic:
+  - Supports requirement: "If the user is new, let them create either a rider or 
+    driver account"
+  - Users can potentially be both driver AND rider (separate profiles)
+
+RELATIONSHIP 3: DRIVER → RIDE (1:M)
+-----------------------------------
+Cardinality: One-to-Many (1:M)
+Type: Mandatory (each ride must have a driver)
+Relationship Name: "gives" or "provides"
+Description:
+  - One driver can give/provide many rides
+  - Each ride has exactly one driver
+  - Driver can have zero or more rides
+Implementation: RIDE.driver_id → DRIVER.driver_id
+Business Logic:
+  - Supports "View Rides" feature for drivers
+  - Query: SELECT * FROM RIDE WHERE driver_id = ?
+  - Supports "View Rating" feature:
+    * Query: SELECT AVG(rating) FROM RIDE WHERE driver_id = ? AND rating IS NOT NULL
+  - When rider "Finds a Driver", we query: 
+    SELECT * FROM DRIVER WHERE driver_mode = 'active'
+
+RELATIONSHIP 4: RIDER → RIDE (1:M)
+-----------------------------------
+Cardinality: One-to-Many (1:M)
+Type: Mandatory (each ride must have a rider)
+Relationship Name: "takes" or "requests"
+Description:
+  - One rider can take/request many rides
+  - Each ride has exactly one rider
+  - Rider can have zero or more rides
+Implementation: RIDE.rider_id → RIDER.rider_id
+Business Logic:
+  - Supports "View Rides" feature for riders
+  - Query: SELECT * FROM RIDE WHERE rider_id = ?
+  - Supports "Rate My Driver" feature:
+    * Query rider's most recent ride: 
+      SELECT * FROM RIDE WHERE rider_id = ? 
+      ORDER BY created_at DESC LIMIT 1
+    * Or query by ride_id if rider specifies different ride
+    * Update rating: UPDATE RIDE SET rating = ?, rating_comment = ? 
+      WHERE ride_id = ?
+
+================================================================================
+                        FUNCTIONAL DEPENDENCIES
+================================================================================
+
+USER Entity:
+  - user_id → username, password, email, phone_number, full_name, created_at, updated_at
+
+DRIVER Entity:
+  - driver_id → user_id, license_number, license_expiry, vehicle_make, vehicle_model,
+                vehicle_year, vehicle_color, license_plate, insurance_number,
+                driver_mode, registration_date, created_at, updated_at
+  - user_id → USER (Foreign Key Dependency)
+  - Note: user_id is unique (one user, one driver profile)
+
+RIDER Entity:
+  - rider_id → user_id, payment_info, preferred_payment, credit_card_last4,
+              default_location, created_at, updated_at
+  - user_id → USER (Foreign Key Dependency)
+  - Note: user_id is unique (one user, one rider profile)
+
+RIDE Entity:
+  - ride_id → driver_id, rider_id, pickup_location, pickup_address, pickup_latitude,
+             pickup_longitude, dropoff_location, dropoff_address, dropoff_latitude,
+             dropoff_longitude, pickup_time, dropoff_time, ride_status, rating,
+             rating_comment, fare_amount, distance_miles, duration_minutes,
+             created_at, updated_at
+  - driver_id → DRIVER (Foreign Key Dependency)
+  - rider_id → RIDER (Foreign Key Dependency)
+
+================================================================================
+                        PRIMARY & FOREIGN KEYS
+================================================================================
+
+PRIMARY KEYS (PK):
+  - USER.user_id
+  - DRIVER.driver_id
+  - RIDER.rider_id
+  - RIDE.ride_id
+
+FOREIGN KEYS (FK):
+  - DRIVER.user_id → USER.user_id (1:1, optional)
+  - RIDER.user_id → USER.user_id (1:1, optional)
+  - RIDE.driver_id → DRIVER.driver_id (M:1, mandatory)
+  - RIDE.rider_id → RIDER.rider_id (M:1, mandatory)
+
+CONSTRAINTS:
+  - All foreign keys should have referential integrity (CASCADE on delete/update)
+  - USER.username must be UNIQUE
+  - USER.email must be UNIQUE
+  - DRIVER.user_id must be UNIQUE (one driver per user)
+  - RIDER.user_id must be UNIQUE (one rider per user)
+
+================================================================================
+                        NORMALIZATION (3rd Normal Form)
+================================================================================
+
+All entities are in 3rd Normal Form (3NF):
+
+✓ No repeating groups - each attribute appears once
+✓ No partial dependencies - all non-key attributes depend on the full primary key
+✓ No transitive dependencies - non-key attributes don't depend on other non-key 
+  attributes
+
+Justification:
+  - Each entity has a single primary key
+  - All attributes fully depend on their primary key
+  - No redundancy - USER stores only user data, DRIVER stores only driver data, etc.
+  - RIDE properly references DRIVER and RIDER via foreign keys (no duplication)
+
+================================================================================
+                        FEATURE REQUIREMENTS MAPPING
+================================================================================
+
+REQUIREMENT 1: User Authentication
+  Entity: USER
+  Query: SELECT * FROM USER WHERE username = ? AND password = ?
+
+REQUIREMENT 2: Create Driver Account
+  Entity: DRIVER
+  Insert: INSERT INTO DRIVER (user_id, license_number, ...) VALUES (?, ?, ...)
+
+REQUIREMENT 3: Create Rider Account
+  Entity: RIDER
+  Insert: INSERT INTO RIDER (user_id, payment_info, ...) VALUES (?, ?, ...)
+
+REQUIREMENT 4: Driver - View Rating
+  Entities: RIDE
+  Query: SELECT AVG(rating) FROM RIDE WHERE driver_id = ? AND rating IS NOT NULL
+
+REQUIREMENT 5: Driver - View Rides
+  Entities: RIDE
+  Query: SELECT * FROM RIDE WHERE driver_id = ? ORDER BY created_at DESC
+
+REQUIREMENT 6: Driver - Activate/Deactivate Driver Mode
+  Entity: DRIVER
+  Update: UPDATE DRIVER SET driver_mode = ? WHERE driver_id = ?
+
+REQUIREMENT 7: Rider - View Rides
+  Entities: RIDE
+  Query: SELECT * FROM RIDE WHERE rider_id = ? ORDER BY created_at DESC
+
+REQUIREMENT 8: Rider - Find a Driver
+  Entities: DRIVER, RIDE
+  Query: SELECT * FROM DRIVER WHERE driver_mode = 'active' LIMIT 1
+  Insert: INSERT INTO RIDE (driver_id, rider_id, pickup_location, ...) VALUES (?, ?, ?, ...)
+
+REQUIREMENT 9: Rider - Rate My Driver
+  Entities: RIDE
+  Query (most recent): SELECT * FROM RIDE WHERE rider_id = ? ORDER BY created_at DESC LIMIT 1
+  Query (by ID): SELECT * FROM RIDE WHERE ride_id = ? AND rider_id = ?
+  Update: UPDATE RIDE SET rating = ?, rating_comment = ? WHERE ride_id = ?

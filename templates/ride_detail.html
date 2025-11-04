@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Ride Details - Rideshare Application{% endblock %}
+
+{% block content %}
+<h2 style="color: #667eea; margin-bottom: 30px;">Ride Details</h2>
+
+<div class="card">
+    <h3 style="margin-bottom: 20px;">Ride #{{ ride.ride_id }}</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+        <div>
+            <p><strong>Status:</strong> 
+                <span class="status-badge status-{{ ride.ride_status }}">{{ ride.ride_status.upper() }}</span>
+            </p>
+        </div>
+        
+        {% if ride.rating %}
+        <div>
+            <p><strong>Rating:</strong> {{ ride.rating }}/5</p>
+        </div>
+        {% endif %}
+        
+        {% if ride.fare_amount %}
+        <div>
+            <p><strong>Fare:</strong> ${{ "%.2f"|format(ride.fare_amount) }}</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <h4 style="color: #667eea; margin-bottom: 10px;">Pickup Location</h4>
+        <p>{{ ride.pickup_location }}</p>
+        {% if ride.pickup_address %}
+        <p style="color: #6c757d; font-size: 0.9em;">{{ ride.pickup_address }}</p>
+        {% endif %}
+        {% if ride.pickup_time %}
+        <p style="color: #6c757d; font-size: 0.9em;">Pickup Time: {{ ride.pickup_time }}</p>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <h4 style="color: #667eea; margin-bottom: 10px;">Dropoff Location</h4>
+        <p>{{ ride.dropoff_location }}</p>
+        {% if ride.dropoff_address %}
+        <p style="color: #6c757d; font-size: 0.9em;">{{ ride.dropoff_address }}</p>
+        {% endif %}
+        {% if ride.dropoff_time %}
+        <p style="color: #6c757d; font-size: 0.9em;">Dropoff Time: {{ ride.dropoff_time }}</p>
+        {% endif %}
+    </div>
+    
+    {% if ride.driver_name %}
+    <div style="margin-bottom: 20px;">
+        <h4 style="color: #667eea; margin-bottom: 10px;">Driver Information</h4>
+        <p>Name: {{ ride.driver_name }}</p>
+        {% if ride.vehicle_make and ride.vehicle_model %}
+        <p>Vehicle: {{ ride.vehicle_make }} {{ ride.vehicle_model }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    {% if ride.rider_name %}
+    <div style="margin-bottom: 20px;">
+        <h4 style="color: #667eea; margin-bottom: 10px;">Rider Information</h4>
+        <p>Name: {{ ride.rider_name }}</p>
+    </div>
+    {% endif %}
+    
+    {% if ride.rating_comment %}
+    <div style="margin-bottom: 20px;">
+        <h4 style="color: #667eea; margin-bottom: 10px;">Rating Comment</h4>
+        <p>{{ ride.rating_comment }}</p>
+    </div>
+    {% endif %}
+    
+    {% if ride.distance_miles %}
+    <p><strong>Distance:</strong> {{ ride.distance_miles }} miles</p>
+    {% endif %}
+    
+    {% if ride.duration_minutes %}
+    <p><strong>Duration:</strong> {{ ride.duration_minutes }} minutes</p>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+    {% if user_type == 'driver' %}
+    <a href="{{ url_for('driver_rides') }}" class="btn btn-secondary">Back to My Rides</a>
+    {% else %}
+    <a href="{{ url_for('rider_rides') }}" class="btn btn-secondary">Back to My Rides</a>
+    {% endif %}
+</div>
+{% endblock %}
+

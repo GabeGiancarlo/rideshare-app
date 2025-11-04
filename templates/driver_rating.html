@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Driver Rating - Rideshare Application{% endblock %}
+
+{% block content %}
+<h2 style="color: #667eea; margin-bottom: 30px;">Your Rating</h2>
+
+<div class="card" style="text-align: center; padding: 40px;">
+    {% if rating %}
+    <h3 style="font-size: 3em; color: #667eea; margin-bottom: 20px;">{{ "%.2f"|format(rating) }}/5.0</h3>
+    <div class="rating-stars" style="font-size: 2em; margin-bottom: 20px;">
+        {% for i in range(5) %}
+            {% if i < rating|int %}
+                ★
+            {% else %}
+                ☆
+            {% endif %}
+        {% endfor %}
+    </div>
+    <p style="color: #6c757d; font-size: 1.1em;">Average rating from all your completed rides</p>
+    {% else %}
+    <h3 style="color: #6c757d; margin-bottom: 20px;">No ratings yet</h3>
+    <p style="color: #6c757d;">Complete rides to start receiving ratings</p>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{{ url_for('driver_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}
+
